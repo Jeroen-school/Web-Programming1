@@ -1,0 +1,27 @@
+﻿@model MvcWhatsUp.Models.User
+
+@{
+    ViewData["Title"] = "Edit user";
+}
+
+<h4>Edit User</h4>
+
+<form action="/Users/Edit" method="Post">
+    <input hidden type="number" name="UserId" value="@Model.UserId" />
+
+    <label for="UserName">Name:</label>
+    <input type="text" id="UserName" name="UserName" class="form-control" required value="@Model?.UserName" />
+
+    <label for="MobileNumber">Mobile number:</label>
+    <input type="text" id="MobileNumber" name="MobileNumber" class="form-control" required value="@Model?.MobileNumber" />
+
+    <label for="EmailAddress">Email Address:</label>
+    <input type="text" id="EmailAddress" name="EmailAddress" class="form-control" required value="@Model?.EmailAddress" />
+
+    <input hidden type="password" id="Password" name="Password" class="form-control" required value="@Model?.Password" />
+
+    <button type="submit" class="btn btn-primary">Send</button>
+
+</form>
+
+<a href="/Users/Index"> Back to list</a>
