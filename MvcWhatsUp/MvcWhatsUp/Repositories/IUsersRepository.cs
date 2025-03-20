@@ -8,6 +8,7 @@ namespace MvcWhatsUp.Repositories
 
         User? GetById(int userId);
 
+        User? GetByLoginCredentials(string username, string password);
 
         void Add(User user);
 

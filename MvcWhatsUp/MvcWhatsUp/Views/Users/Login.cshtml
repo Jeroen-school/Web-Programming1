@@ -1,0 +1,21 @@
+﻿@model MvcWhatsUp.Models.LoginModel
+
+@{
+    ViewData["Title"] = "Login";
+}
+
+<h1> Login</h1>
+
+<form action="/Users/Login" method="Post">
+    <label for="username">Username:</label>
+    <input type="text" id="username" name="username" class="form-control" required value="@Model?.Username"/>
+
+    <label for="password">Password:</label>
+    <input type="password" id="password" name="password" class="form-control" required value="@Model?.Password"/>
+
+
+    <button type="submit" class="btn btn-primary">Send</button>
+
+
+
+</form>

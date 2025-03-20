@@ -15,6 +15,13 @@ namespace MvcWhatsUp.Controllers
 
         public IActionResult Index()
         {
+            //log in a user through a cookie
+            //THIS IS NOT SAFE, YOU CAN EDIT COOKIES AND LOG IN WITHOUT PASSWORDS. TOO BAD!
+            string? userId = Request.Cookies["UserId"];
+
+            //pass the logged in user ID to the view
+            ViewData["UserId"] = userId;
+
             List<User> users = _usersRepository.GetAll();
 
             return View(users);
@@ -74,7 +81,7 @@ namespace MvcWhatsUp.Controllers
 
         //When opening the users/Edit page from the users page
         [HttpGet]
-        public ActionResult Delete(int id)
+        public ActionResult Delete(int? id)
         {
             if (id == null)
             {
@@ -100,6 +107,33 @@ namespace MvcWhatsUp.Controllers
                 return View(user);
             }
         }
+
+
+        //Logging in
+        [HttpGet]
+        public IActionResult Login()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult Login(LoginModel loginModel)
+        {
+            User? user = _usersRepository.GetByLoginCredentials(loginModel.Username, loginModel.Password);
+
+            if (user == null)
+            {
+                return View(loginModel);
+            }
+            else
+            {
+                //THIS IS NOT THE RIGHT WAY TO DO IT. TOO BAD!
+                Response.Cookies.Append("UserId", user.UserId.ToString());
+
+                return RedirectToAction("Index", "Users");
+            }
+
+        } 
 
     }
 }

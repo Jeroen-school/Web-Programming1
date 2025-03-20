@@ -14,14 +14,7 @@
         
         //constructors
         public User ()
-        {
-            this.UserId = 0;
-            this.UserName = "";
-            this.MobileNumber = "";
-            this.EmailAddress = "";
-            this.Password = "";
-            this.Deleted = false;
-        }
+        {        }
 
         public User(int id, string name, string mobileNumber, string emailAddress)
         {

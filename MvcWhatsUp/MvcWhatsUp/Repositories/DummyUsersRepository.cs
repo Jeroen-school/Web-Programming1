@@ -26,6 +26,11 @@ namespace MvcWhatsUp.Repositories
             return users.FirstOrDefault(x => x.UserId == userId);
         }
 
+        public User? GetByLoginCredentials(string username, string password)
+        {
+            return null;
+        }
+
         public void Add(User user)
         {
             int ID = users.Count;

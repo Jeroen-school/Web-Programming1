@@ -101,6 +101,38 @@ namespace MvcWhatsUp.Repositories
             return user;
         }
 
+        public User? GetByLoginCredentials(string username, string password)
+        {
+            User? user = new User();
+
+            using (SqlConnection connection = new SqlConnection(_connectionString))
+            {
+                string query = $"SELECT UserId, UserName, MobileNumber, EmailAddress, [Password], users.Deleted FROM Users WHERE [UserName] = @UserName AND [Password] = @Password";
+                SqlCommand command = new SqlCommand(query, connection);
+
+                command.Parameters.AddWithValue("@UserName", username);
+                command.Parameters.AddWithValue("@Password", password);
+
+                command.Connection.Open();
+                SqlDataReader reader = command.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    user = ReadUserWithPassword(reader);
+                }
+
+                reader.Close();
+            }
+
+            if (user.UserName != null)
+            {
+                return user;
+            } else
+            {
+                return null;
+            }
+        }
+
         //With this you can add a new user
         public void Add(User user)
         {

@@ -3,7 +3,11 @@
 
 @{
     ViewData["Title"] = "Users";
-    
+    int loggedInUserId = -1;
+    if (ViewData["UserId"] != null)
+    {
+        loggedInUserId = int.Parse(ViewData["UserId"].ToString());
+    }
 }
 
 
@@ -27,12 +31,24 @@
             @{
                 foreach(User user in Model)
                 {
-                    <tr>
+                    string rowStyle = "";
+                    @if(@user.UserId == loggedInUserId)
+                    {
+                        rowStyle = "class=table-info";
+                    }
+
+                    <tr @rowStyle>
                         <td>@user.UserId</td>
                         <td>@user.UserName</td>
                         <td>@user.MobileNumber</td>
                         <td>@user.EmailAddress</td>
-                        <td><a href="/Users/Edit/@user.UserId">Edit</a> <a href="/Users/Delete/@user.UserId">Delete</a></td>
+                        <td><a href="/Users/Edit/@user.UserId">Edit</a> <a href="/Users/Delete/@user.UserId">Delete</a>
+                            @if((loggedInUserId != -1) && (@user.UserId != int.Parse(loggedInUserId.ToString())))
+                            {
+                                <a href="/Chats/DisplayChat/@user.UserId">Display Chat</a>
+                            }
+
+                        </td>
                     </tr>
                 }
 
