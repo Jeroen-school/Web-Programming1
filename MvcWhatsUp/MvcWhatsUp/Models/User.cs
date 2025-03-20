@@ -9,6 +9,8 @@
         public string EmailAddress { get; set; }
         public string Password { get; set; }
 
+        public bool Deleted { get; set; }
+
         
         //constructors
         public User ()
@@ -18,6 +20,7 @@
             this.MobileNumber = "";
             this.EmailAddress = "";
             this.Password = "";
+            this.Deleted = false;
         }
 
         public User(int id, string name, string mobileNumber, string emailAddress)
@@ -26,6 +29,7 @@
             this.UserName = name;
             this.MobileNumber = mobileNumber;
             this.EmailAddress = emailAddress;
+            this.Deleted = false;
         }
 
         public User (int id, string name, string mobileNumber, string emailAddress, string password)
@@ -35,6 +39,26 @@
             this.MobileNumber = mobileNumber;
             this.EmailAddress = emailAddress;
             this.Password = password;
+            this.Deleted = false;
+        }
+
+        public User(int id, string name, string mobileNumber, string emailAddress, bool deleted)
+        {
+            this.UserId = id;
+            this.UserName = name;
+            this.MobileNumber = mobileNumber;
+            this.EmailAddress = emailAddress;
+            this.Deleted = deleted;
+        }
+
+        public User(int id, string name, string mobileNumber, string emailAddress, string password, bool deleted)
+        {
+            this.UserId = id;
+            this.UserName = name;
+            this.MobileNumber = mobileNumber;
+            this.EmailAddress = emailAddress;
+            this.Password = password;
+            this.Deleted = deleted;
         }
 
         //methods
