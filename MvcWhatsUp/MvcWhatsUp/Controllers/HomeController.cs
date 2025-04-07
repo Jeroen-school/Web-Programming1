@@ -37,7 +37,7 @@ namespace MvcWhatsUp.Controllers
         [HttpPost]
         public string SendMessage(Message message)
         {
-            return $"Message {message.MessageText} has been sent by {message.Name}";
+            return $"Message {message.MessageText} has been sent by {message.SenderUserId}";
         }
 
         [HttpGet]

@@ -10,6 +10,7 @@ namespace MvcWhatsUp
 
             // Add services to the container.
             builder.Services.AddSingleton<IUsersRepository, DbUsersRepository>();
+            builder.Services.AddSingleton<IChatsRepository, ChatsRepository>();
             builder.Services.AddControllersWithViews();
 
             var app = builder.Build();

@@ -3,20 +3,25 @@
     public class Message
     {
         //fields and properties
-        public string Name { get; set; }
+        public int MessageId { get; set; }
+        public int SenderUserId { get; set; }
+        public int ReceiverUserId { get; set; }
         public string MessageText { get; set; }
+        public DateTime SendAt { get; set; }
 
         //constructors
         public Message()
         {
-            this.Name = "";
             this.MessageText = "";
         }
 
-        public Message (string name, string message)
+        public Message (int id, int senderUserId, int receiverUserId, string messageText, DateTime sendAt)
         {
-            this.Name = name;
-            this.MessageText = message;
+            this.MessageId = id;
+            this.SenderUserId = senderUserId;
+            this.ReceiverUserId = receiverUserId;
+            this.MessageText = messageText;
+            this.SendAt = sendAt;
         }
 
         //methods
