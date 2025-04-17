@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MvcWhatsUp.Models;
 using MvcWhatsUp.Repositories;
+using MvcWhatsUp.ViewModels;
 
 namespace MvcWhatsUp.Controllers
 {
@@ -81,18 +82,16 @@ namespace MvcWhatsUp.Controllers
 
             User? sendingUser = _usersRepository.GetById(int.Parse(loggedInUserId));
             User? receivingUser = _usersRepository.GetById((int)id);
-            if ((sendingUser == null) || (id == null))
+            if ((sendingUser == null) || (receivingUser == null) )
             {
                 return RedirectToAction("Index", "Users");
             }
 
-            ViewData["sendingUser"] = sendingUser;
-            ViewData["receivingUser"] = receivingUser;
-
             List<Message> chatMessages = _chatsRepository.GetMessages(sendingUser.UserId, receivingUser.UserId);
 
+            ChatViewModel chatViewModel = new ChatViewModel(chatMessages, sendingUser, receivingUser);
 
-            return View(chatMessages);
+            return View(chatViewModel);
         }
     }
 }

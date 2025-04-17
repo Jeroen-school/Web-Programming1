@@ -42,10 +42,14 @@ namespace MvcWhatsUp.Controllers
             {
                 _usersRepository.Add(user);
 
+                TempData["Success"] = "User succesfully created!";
+
                 return RedirectToAction("Index");
             }
             catch (Exception ex)
             {
+                ViewBag.ErrorMessage = $"Error creating the user: {ex.Message} Please try again.";
+
                 return View(user);
             }
         }
@@ -70,11 +74,15 @@ namespace MvcWhatsUp.Controllers
             try
             {
                 _usersRepository.Update(user);
-                
+
+                TempData["Success"] = "User succesfully edited!";
+
                 return RedirectToAction("Index");
             }
             catch (Exception ex)
             {
+                ViewBag.ErrorMessage = $"Error editing the user: {ex.Message} Please try again.";
+
                 return View(user);
             }
         }
@@ -100,10 +108,13 @@ namespace MvcWhatsUp.Controllers
             {
                 _usersRepository.Delete(user);
 
+                TempData["Success"] = "User succesfully deleted!";
+
                 return RedirectToAction("Index");
             }
             catch (Exception ex)
             {
+                ViewBag.ErrorMessage = $"{ex.Message} Please try again.";
                 return View(user);
             }
         }
@@ -123,12 +134,15 @@ namespace MvcWhatsUp.Controllers
 
             if (user == null)
             {
+                ViewBag.ErrorMessage = "Wrong username or password!";
                 return View(loginModel);
             }
             else
             {
                 //THIS IS NOT THE RIGHT WAY TO DO IT. TOO BAD!
                 Response.Cookies.Append("UserId", user.UserId.ToString());
+
+                TempData["Success"] = "Succesfully logged in!";
 
                 return RedirectToAction("Index", "Users");
             }

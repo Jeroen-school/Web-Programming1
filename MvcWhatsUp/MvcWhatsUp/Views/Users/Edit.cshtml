@@ -6,6 +6,13 @@
 
 <h4>Edit User</h4>
 
+@{
+    if (ViewBag.ErrorMessage != null)
+    {
+        <div class="alert alert-danger" role="alert">@ViewBag.ErrorMessage</div>
+    }
+}
+
 <form action="/Users/Edit" method="Post">
     <input hidden type="number" name="UserId" value="@Model.UserId" />
 

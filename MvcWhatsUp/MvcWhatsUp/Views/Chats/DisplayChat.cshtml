@@ -1,14 +1,12 @@
-﻿@model IEnumerable<MvcWhatsUp.Models.Message>
+﻿@model MvcWhatsUp.ViewModels.ChatViewModel
 
 @{
     ViewData["Title"] = "Chat";
-    User? sendingUser = ViewData["sendingUser"] as User;
-    User? receivingUser = ViewData["receivingUser"] as User;
 }
 
-<p><a href="/Chats/AddMessage/@receivingUser?.UserId" class="btn btn-primary">Add a message</a></p>
+<p><a href="/Chats/AddMessage/@Model.ReceivingUser.UserId" class="btn btn-primary">Add a message</a></p>
 
-<h3>Chat between @sendingUser?.UserName and @receivingUser?.UserName</h3>
+<h3>Chat between @Model.SendingUser.UserName and @Model.ReceivingUser.UserName</h3>
 
 <table class="table table-hover">
     <thead class="table-dark">
@@ -19,10 +17,10 @@
     </thead>
     <tbody>
         @{
-            foreach(Message message in Model)
+            foreach(Message message in Model.Messages)
             {
                 <tr>
-                    @if( message.SenderUserId == @sendingUser?.UserId)
+                    @if( message.SenderUserId == @Model.SendingUser.UserId)
                     {
                         <td class="text-start">@message.MessageText</td>
                     }
