@@ -13,6 +13,15 @@ namespace MvcWhatsUp
             builder.Services.AddSingleton<IChatsRepository, ChatsRepository>();
             builder.Services.AddControllersWithViews();
 
+            //enable session
+            builder.Services.AddSession(options =>
+            {
+                options.IdleTimeout = TimeSpan.FromMinutes(30);
+                options.Cookie.HttpOnly = true;
+                options.Cookie.IsEssential = true;
+            });
+
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -27,6 +36,9 @@ namespace MvcWhatsUp
             app.UseStaticFiles();
 
             app.UseRouting();
+
+            //enable sessions
+            app.UseSession();
 
             app.UseAuthorization();
 

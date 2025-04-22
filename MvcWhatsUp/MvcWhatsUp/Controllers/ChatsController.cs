@@ -33,8 +33,9 @@ namespace MvcWhatsUp.Controllers
                 return RedirectToAction("Index", "Users");
             }
 
-            string? loggedInUserId = Request.Cookies["UserId"];
-            if (loggedInUserId == null)
+            User? loggedInUser = HttpContext.Session.GetObject<User>("LoggedInUser");
+
+            if (loggedInUser == null)
             {
                 return RedirectToAction("Index", "Users");
             }
@@ -43,7 +44,7 @@ namespace MvcWhatsUp.Controllers
             ViewData["receivingUser"] = receivingUser;
 
             Message message = new Message();
-            message.SenderUserId = int.Parse(loggedInUserId);
+            message.SenderUserId = loggedInUser.UserId;
             message.ReceiverUserId = (int)id;
 
             return View(message);
@@ -74,22 +75,21 @@ namespace MvcWhatsUp.Controllers
                 return RedirectToAction("Index", "Users");
             }
 
-            string? loggedInUserId = Request.Cookies["UserId"];
-            if (loggedInUserId == null)
+            User? loggedInUser = HttpContext.Session.GetObject<User>("LoggedInUser");
+            if (loggedInUser == null)
             {
                 return RedirectToAction("Index", "Users");
             }
 
-            User? sendingUser = _usersRepository.GetById(int.Parse(loggedInUserId));
             User? receivingUser = _usersRepository.GetById((int)id);
-            if ((sendingUser == null) || (receivingUser == null) )
+            if (receivingUser == null)
             {
                 return RedirectToAction("Index", "Users");
             }
 
-            List<Message> chatMessages = _chatsRepository.GetMessages(sendingUser.UserId, receivingUser.UserId);
+            List<Message> chatMessages = _chatsRepository.GetMessages(loggedInUser.UserId, receivingUser.UserId);
 
-            ChatViewModel chatViewModel = new ChatViewModel(chatMessages, sendingUser, receivingUser);
+            ChatViewModel chatViewModel = new ChatViewModel(chatMessages, loggedInUser, receivingUser);
 
             return View(chatViewModel);
         }

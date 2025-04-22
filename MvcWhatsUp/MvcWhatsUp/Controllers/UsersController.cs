@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MvcWhatsUp.Repositories;
 using MvcWhatsUp.Models;
+using System.Text.Json;
 
 namespace MvcWhatsUp.Controllers
 {
@@ -15,12 +16,22 @@ namespace MvcWhatsUp.Controllers
 
         public IActionResult Index()
         {
-            //log in a user through a cookie
-            //THIS IS NOT SAFE, YOU CAN EDIT COOKIES AND LOG IN WITHOUT PASSWORDS. TOO BAD!
-            string? userId = Request.Cookies["UserId"];
+            /*
+             //retrieve logged in user JSON through a session
+             User? loggedInUser = null;
+             string? userJson = HttpContext.Session.GetString("LoggedInUser");
+
+             //If a user string is retrieved, deserialize it
+             if (userJson != null)
+             {
+                 loggedInUser = JsonSerializer.Deserialize<User>(userJson);
+             }
+            */
+
+            User? loggedInUser = HttpContext.Session.GetObject<User>("LoggedInUser");
 
             //pass the logged in user ID to the view
-            ViewData["UserId"] = userId;
+            ViewData["LoggedInUser"] = loggedInUser;
 
             List<User> users = _usersRepository.GetAll();
 
@@ -139,8 +150,14 @@ namespace MvcWhatsUp.Controllers
             }
             else
             {
-                //THIS IS NOT THE RIGHT WAY TO DO IT. TOO BAD!
-                Response.Cookies.Append("UserId", user.UserId.ToString());
+                /*
+                //serialize logged in user, so you can put it in the session
+                string userJson = JsonSerializer.Serialize(user);
+
+                //remember logged in user, using the session
+                HttpContext.Session.SetString("LoggedInUser", userJson);
+                */
+                HttpContext.Session.SetObject("LoggedInUser", user);
 
                 TempData["Success"] = "Succesfully logged in!";
 
