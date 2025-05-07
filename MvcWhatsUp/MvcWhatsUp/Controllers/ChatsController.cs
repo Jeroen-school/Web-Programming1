@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MvcWhatsUp.Models;
-using MvcWhatsUp.Repositories;
+using MvcWhatsUp.Services;
 using MvcWhatsUp.ViewModels;
 
 namespace MvcWhatsUp.Controllers
@@ -8,15 +8,15 @@ namespace MvcWhatsUp.Controllers
     public class ChatsController : Controller
     {
         //fields and properties
-        private readonly IChatsRepository _chatsRepository;
+        private readonly IChatsService _chatsService;
 
-        private readonly IUsersRepository _usersRepository;
+        private readonly IUsersService _usersService;
 
         //constructors
-        public ChatsController(IChatsRepository chatsRepository, IUsersRepository usersRepository)
+        public ChatsController(IChatsService chatsService, IUsersService usersService)
         {
-            _chatsRepository = chatsRepository;
-            _usersRepository = usersRepository;
+            _chatsService = chatsService;
+            _usersService = usersService;
         }
 
         //methods
@@ -40,7 +40,7 @@ namespace MvcWhatsUp.Controllers
                 return RedirectToAction("Index", "Users");
             }
 
-            User? receivingUser = _usersRepository.GetById((int)id);
+            User? receivingUser = _usersService.GetById((int)id);
             ViewData["receivingUser"] = receivingUser;
 
             Message message = new Message();
@@ -56,7 +56,7 @@ namespace MvcWhatsUp.Controllers
             try
             {
                 message.SendAt = DateTime.Now;
-                _chatsRepository.AddMessage(message);
+                _chatsService.AddMessage(message);
 
 
                 return RedirectToAction("DisplayChat", new { id = message.ReceiverUserId });
@@ -81,13 +81,13 @@ namespace MvcWhatsUp.Controllers
                 return RedirectToAction("Index", "Users");
             }
 
-            User? receivingUser = _usersRepository.GetById((int)id);
+            User? receivingUser = _usersService.GetById((int)id);
             if (receivingUser == null)
             {
                 return RedirectToAction("Index", "Users");
             }
 
-            List<Message> chatMessages = _chatsRepository.GetMessages(loggedInUser.UserId, receivingUser.UserId);
+            List<Message> chatMessages = _chatsService.GetMessages(loggedInUser.UserId, receivingUser.UserId);
 
             ChatViewModel chatViewModel = new ChatViewModel(chatMessages, loggedInUser, receivingUser);
 

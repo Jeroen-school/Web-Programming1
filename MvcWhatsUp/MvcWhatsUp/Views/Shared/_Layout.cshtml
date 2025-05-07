@@ -7,7 +7,15 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/MvcWhatsUp.styles.css" asp-append-version="true" />
-    <link rel="stylesheet" href="@ViewData["Stylesheet"]" asp-append-version="true" />
+    @{
+        string? theme = Context.Request.Cookies["PreferredTheme"];
+        if ((theme !=null) && ((theme == "dark") || (theme == "light")) )
+        {
+            theme = theme + ".css";
+            <link rel="stylesheet" href="~/css/@theme" asp-append-version="true" />
+        }
+    }
+
 </head>
 <body>
     <header>
@@ -41,9 +49,26 @@
         </main>
     </div>
 
-    <footer class="border-top footer text-muted">
+    <footer class="border-top footer text-muted d-flex">
         <div class="container">
             &copy; 2025 - MvcWhatsUp - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+        </div>
+
+        <div class="container">
+            <ul class="navbar-nav flex-row justify-content-end">
+                <li class="mx-1">
+                    <p> Preferred theme:</p>
+                </li>
+                <li class="nav-item mx-1">
+                    <a class="nav-link" href="/Users/SetPreferredTheme?theme=light">Light</a>
+                </li>
+                <li class="nav-item mx-1">
+                    <a class="nav-link" href="/Users/SetPreferredTheme?theme=dark">Dark</a>
+                </li>
+                <li class="nav-item mx-1">
+                    <a class="nav-link" asp-area="" asp-controller="Users" asp-action="ClearPreferredTheme">Reset</a>
+                </li>
+            </ul>
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>

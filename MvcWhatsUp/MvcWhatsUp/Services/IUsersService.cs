@@ -1,9 +1,14 @@
 ﻿using MvcWhatsUp.Models;
 
-namespace MvcWhatsUp.Repositories
+namespace MvcWhatsUp.Services
 {
-    public interface IUsersRepository
+    public interface IUsersService
     {
+        //fields and properties
+
+        //constructors
+
+        //methods
         List<User> GetAll();
 
         User? GetById(int userId);
@@ -15,12 +20,5 @@ namespace MvcWhatsUp.Repositories
         void Update(User user);
 
         void Delete(User user);
-
-        bool EmailAddressExists(string emailAddress);
-
-
-
-
-
     }
 }

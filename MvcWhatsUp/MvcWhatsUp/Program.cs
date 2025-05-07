@@ -1,4 +1,5 @@
 using MvcWhatsUp.Repositories;
+using MvcWhatsUp.Services;
 
 namespace MvcWhatsUp
 {
@@ -11,6 +12,10 @@ namespace MvcWhatsUp
             // Add services to the container.
             builder.Services.AddSingleton<IUsersRepository, DbUsersRepository>();
             builder.Services.AddSingleton<IChatsRepository, ChatsRepository>();
+
+            builder.Services.AddSingleton<IUsersService, UsersService>();
+            builder.Services.AddSingleton<IChatsService, ChatsService>();
+
             builder.Services.AddControllersWithViews();
 
             //enable session

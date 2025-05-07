@@ -204,5 +204,21 @@ namespace MvcWhatsUp.Repositories
                 throw new Exception("Wrong password.");
             }
         }
+
+        public bool EmailAddressExists(string emailAddress)
+        {
+            using (SqlConnection connection = new SqlConnection(_connectionString))
+            {
+                string query = $"SELECT COUNT(*) FROM Users WHERE EmailAddress = @EmailAddress";
+                SqlCommand command = new SqlCommand(query, connection);
+
+                command.Parameters.AddWithValue("@EmailAddress", emailAddress);
+
+                command.Connection.Open();
+                int count = (int)command.ExecuteScalar();
+
+                return count > 0;
+            }
+        }
     }
 }

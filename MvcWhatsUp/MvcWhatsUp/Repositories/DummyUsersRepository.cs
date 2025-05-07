@@ -53,6 +53,11 @@ namespace MvcWhatsUp.Repositories
 
         }
 
+        public bool EmailAddressExists(string emailAddress)
+        {
+            return false;
+        }
+
 
     }
 }

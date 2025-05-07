@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using MvcWhatsUp.Repositories;
+using MvcWhatsUp.Services;
 using MvcWhatsUp.Models;
 using System.Text.Json;
 
@@ -7,11 +7,11 @@ namespace MvcWhatsUp.Controllers
 {
     public class UsersController : Controller
     {
-        private readonly IUsersRepository _usersRepository;
+        private readonly IUsersService _usersService;
 
-        public UsersController(IUsersRepository usersRepository)
+        public UsersController(IUsersService usersService)
         {
-            _usersRepository = usersRepository;
+            _usersService = usersService;
         }
 
         public IActionResult Index()
@@ -33,7 +33,7 @@ namespace MvcWhatsUp.Controllers
             //pass the logged in user ID to the view
             ViewData["LoggedInUser"] = loggedInUser;
 
-            List<User> users = _usersRepository.GetAll();
+            List<User> users = _usersService.GetAll();
 
             return View(users);
         }
@@ -51,7 +51,7 @@ namespace MvcWhatsUp.Controllers
         {
             try
             {
-                _usersRepository.Add(user);
+                _usersService.Add(user);
 
                 TempData["Success"] = "User succesfully created!";
 
@@ -74,7 +74,7 @@ namespace MvcWhatsUp.Controllers
                 return NotFound();
             }
 
-            User? user = _usersRepository.GetById((int)id);
+            User? user = _usersService.GetById((int)id);
             return View(user);
         }
 
@@ -84,7 +84,7 @@ namespace MvcWhatsUp.Controllers
         {
             try
             {
-                _usersRepository.Update(user);
+                _usersService.Update(user);
 
                 TempData["Success"] = "User succesfully edited!";
 
@@ -107,7 +107,7 @@ namespace MvcWhatsUp.Controllers
                 return NotFound();
             }
 
-            User? user = _usersRepository.GetById((int)id);
+            User? user = _usersService.GetById((int)id);
             return View(user);
         }
 
@@ -117,7 +117,7 @@ namespace MvcWhatsUp.Controllers
         {
             try
             {
-                _usersRepository.Delete(user);
+                _usersService.Delete(user);
 
                 TempData["Success"] = "User succesfully deleted!";
 
@@ -141,7 +141,7 @@ namespace MvcWhatsUp.Controllers
         [HttpPost]
         public IActionResult Login(LoginModel loginModel)
         {
-            User? user = _usersRepository.GetByLoginCredentials(loginModel.Username, loginModel.Password);
+            User? user = _usersService.GetByLoginCredentials(loginModel.Username, loginModel.Password);
 
             if (user == null)
             {
@@ -164,7 +164,32 @@ namespace MvcWhatsUp.Controllers
                 return RedirectToAction("Index", "Users");
             }
 
-        } 
+        }
+
+        public IActionResult SetPreferredTheme(string? theme)
+        {
+            if (theme != null)
+            {
+                CookieOptions options = new CookieOptions()
+                {
+                    Expires = DateTime.Now.AddDays(7),
+                    Path = "/",
+                    Secure = true,
+                    HttpOnly = true,
+                    IsEssential = true
+                };
+                Response.Cookies.Append("PreferredTheme", theme, options);
+            }
+
+            return RedirectToAction("Index", "Home");
+        }
+
+        public IActionResult ClearPreferredTheme()
+        {
+            Response.Cookies.Delete("PreferredTheme");
+
+            return RedirectToAction("Index", "Home");
+        }
 
     }
 }
