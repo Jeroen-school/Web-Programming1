@@ -6,12 +6,7 @@
 
 <h4>New User</h4>
 
-@{
-    if (ViewBag.ErrorMessage != null)
-    {
-        <div class="alert alert-danger" role="alert">@ViewBag.ErrorMessage</div>
-    }
-}
+<partial name="_ErrorMessage.cshtml" />
 
 <form action="/Users/Create" method="Post">
     <label for="UserName">Name:</label>

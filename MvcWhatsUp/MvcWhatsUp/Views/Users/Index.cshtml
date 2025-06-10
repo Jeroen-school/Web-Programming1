@@ -14,12 +14,7 @@
     <a href="/Users/Create">Create new</a>
 
 
-    @{
-        if(TempData["Success"] != null)
-        {
-            <div class="alert alert-success" role="alert">@TempData["Success"]</div>
-        }
-    }
+    <partial name="_ConfirmMessage.cshtml" />
 
     <table class="table">
         <thead>
