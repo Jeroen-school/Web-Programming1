@@ -25,5 +25,11 @@ namespace MvcWhatsUp.Services
             //get messages between two users
             return _chatsRepository.GetMessages(userId1, userId2);
         }
+
+        public List<Message> GetLatestMessages(int userId, int numberOfMessages)
+        {
+            //get latest messages for a user
+            return _chatsRepository.GetLatestMessages(userId, numberOfMessages);
+        }
     }
 }

@@ -1,5 +1,8 @@
 ﻿@{
     ViewData["Title"] = "Chats";
-
-
 }
+
+@await Component.InvokeAsync("TopMessages", 3)
+
+
+<vc:top-messages number-of-messages="2" />

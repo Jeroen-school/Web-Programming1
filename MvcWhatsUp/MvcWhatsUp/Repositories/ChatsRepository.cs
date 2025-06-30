@@ -80,5 +80,36 @@ namespace MvcWhatsUp.Repositories
                 message.MessageId = Convert.ToInt32(command.ExecuteScalar());
             }
         }
+
+        public List<Message> GetLatestMessages(int userId, int numberOfMessages)
+        {
+            List<Message> messages = new List<Message>();
+
+            using (SqlConnection connection = new SqlConnection(_connectionString))
+            {
+                string query = "SELECT [MessageId], [SenderUserId], [ReceiverUserId], [Message], [SendAt]" +
+                            "FROM [messages]" +
+                            "WHERE [SenderUserId] = @UserId " +
+                            "ORDER BY [SendAt] ASC";
+
+                SqlCommand command = new SqlCommand(query, connection);
+
+                command.Parameters.AddWithValue("@UserId", userId);
+
+                command.Connection.Open();
+                SqlDataReader reader = command.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    Message message = ReadMessage(reader);
+                    messages.Add(message);
+                    if (messages.Count >= numberOfMessages)
+                    {
+                        break; // Stop if we have enough messages
+                    }
+                }
+            }
+            return messages;
+        }
     }
 }
